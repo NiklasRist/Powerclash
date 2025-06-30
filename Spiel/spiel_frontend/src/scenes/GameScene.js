@@ -46,7 +46,7 @@ export default class GameScene extends Phaser.Scene {
                 default: return 'HEALTH_BOOST';
             }
         })() || 'HEALTH_BOOST';
-        this.selectedBrawler = this.registry.get('brawler') || 'sniper';
+        this.selectedBrawler = this.registry.get('brawler');
         console.log("brawlerrrrrr", this.registry.get('brawler'))
         this.playerName = this.registry.get('playerName') || 'Player';
 
@@ -422,11 +422,20 @@ export default class GameScene extends Phaser.Scene {
 
     getBrawlerSpriteName(brawler) {
         console.log(brawler)
-        switch ("Brawler name", brawler) {
-            case 4:   return 'robot1';
-            case 2:   return 'soldier1';
-            case 3: return 'womanGreen';
-            default:       return 'hitman1';
+        const id = typeof brawler === 'number'
+            ? brawler
+            : parseInt(brawler, 10);
+        switch (id) {
+            case 1:
+                return 'hitman1';
+            case 2:
+                return 'soldier1';
+            case 3:
+                return 'womanGreen';
+            case 4:
+                return 'robot1';
+            default:
+                return 'hitman1';
         }
     }
 
@@ -924,11 +933,11 @@ export default class GameScene extends Phaser.Scene {
 
         const {width, height} = this.scale;
 
-        this.add.rectangle(width / 2, height / 2, width - 830, height - 240, 0x000000)
+        const overlay = this.add.rectangle(width / 2, height / 2, width - 830, height - 240, 0x000000)
             .setOrigin(0.5)
             .setScrollFactor(0)
             .setAlpha(0.8).setDepth(1000);
-
+        overlay.setInteractive();
 
         this.victoryText = this.add.text(
             width / 2, height / 2 - 80, `You placed ${place}!`, {
@@ -993,7 +1002,7 @@ export default class GameScene extends Phaser.Scene {
         )
             .setOrigin(0.5)
             .setScrollFactor(0)
-            .setInteractive({ useHandCursor: true }).setDepth(1001);
+            .setInteractive({ useHandCursor: true }).setDepth(1002);
 
         exitBtn.on('pointerover', () => {
             exitBtn.setScale(1.1);
